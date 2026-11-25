@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A Crossroads Christmas Special: Home For Christmas</title>
+<meta name="description" content="A Crossroads Christmas Special: Home For Christmas — a five-episode Christian teen audio drama. Hosts Ellie Grant and Marcus Lee introduce each story, then a full cast brings it to life.">
+<style>
+  :root{--bg:#14231a;--card:#1e2f26;--card2:#283d31;--ink:#f5efe6;--muted:#c3d2c6;--red:#c0392b;--gold:#e8a33d;--line:#3a4a3f;--playing:#3d2f1d}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
+  .wrap{max-width:720px;margin:0 auto;padding:20px 16px 64px}
+  header{text-align:center;margin-bottom:20px}
+  header img.cover{width:min(300px,72vw);height:auto;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.55);display:block;margin:0 auto 16px}
+  h1{font-size:1.9rem;letter-spacing:.06em;margin:0 0 4px}
+  .tag{color:var(--gold);font-size:1.05rem;margin:0 0 6px;font-style:italic}
+  .meta{color:var(--muted);font-size:.92rem;margin:0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:16px 0}
+  .btn{display:inline-block;border:0;border-radius:999px;cursor:pointer;font:inherit;font-weight:700;padding:12px 22px}
+  .btn-gold{background:var(--gold);color:#241a08}
+  .btn-gold:active{transform:translateY(1px)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center}
+  .now-title{font-size:1.15rem;font-weight:700;margin:2px 0}
+  .now-sub{color:var(--muted);font-size:.9rem;margin:0 0 12px}
+  .seek{display:flex;align-items:center;gap:10px;margin:6px 0 2px}
+  .seek time{font-variant-numeric:tabular-nums;font-size:.88rem;color:var(--muted);min-width:44px}
+  .seek time:last-child{text-align:right}
+  input[type=range]{flex:1;accent-color:var(--gold);height:28px;cursor:pointer}
+  .transport{display:flex;justify-content:center;align-items:center;gap:18px;margin:10px 0 4px}
+  .tbtn{background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:50%;width:52px;height:52px;font-size:1.25rem;cursor:pointer}
+  .tbtn.play{background:var(--gold);color:#241a08;width:64px;height:64px;font-size:1.6rem;border:0}
+  .toggle{display:flex;justify-content:center;align-items:center;gap:8px;color:var(--muted);font-size:.92rem;margin-top:10px}
+  .toggle input{accent-color:var(--gold);width:18px;height:18px}
+  .ep{list-style:none;margin:0;padding:0}
+  .ep button{all:unset;display:flex;gap:12px;width:100%;cursor:pointer;padding:13px 12px;border-radius:12px}
+  .ep button:hover{background:var(--card2)}
+  .ep button.current{background:var(--playing);outline:1px solid var(--gold)}
+  .num{flex:0 0 30px;font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums;padding-top:1px;text-align:right}
+  .ep h3{margin:0;font-size:1.02rem}
+  .ep p{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+  .dur{flex:0 0 auto;color:var(--muted);font-size:.88rem;font-variant-numeric:tabular-nums;padding-top:2px}
+  .note{color:var(--muted);font-size:.9rem}
+  footer{text-align:center;color:var(--muted);font-size:.92rem;margin-top:28px}
+  footer .sign{color:var(--gold);font-style:italic;font-size:1.05rem;margin-bottom:14px}
+  @media (max-width:420px){h1{font-size:1.55rem}.ep button{gap:9px;padding:12px 8px}.num{flex-basis:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <img class="cover" src="cover.jpg" alt="Crossroads — A Christmas Special: Home For Christmas cover, a snowy signpost with a red ribbon">
+    <h1>CROSSROADS</h1>
+    <p class="tag">A Christmas Special: Home For Christmas</p>
+    <p class="meta">Hosted by Ellie Grant &amp; Marcus Lee &middot; 5 episodes, one each week &middot; Episode 1 is 19 min 43 s</p>
+  </header>
+
+  <div class="row">
+    <button class="btn btn-gold" id="playAllBtn">&#9654; Play All</button>
+  </div>
+
+  <section class="card" aria-label="Now playing">
+    <p class="now-title" id="nowTitle">Nothing playing yet</p>
+    <p class="now-sub" id="nowSub">Pick the episode below, or press Play All.</p>
+    <div class="seek">
+      <time id="curTime">0:00</time>
+      <input type="range" id="seek" min="0" max="0" step="1" value="0" aria-label="Seek">
+      <time id="totTime">0:00</time>
+    </div>
+    <div class="transport">
+      <button class="tbtn" id="prevBtn" aria-label="Previous episode">&#9198;</button>
+      <button class="tbtn play" id="playBtn" aria-label="Play or pause">&#9654;</button>
+      <button class="tbtn" id="nextBtn" aria-label="Next episode">&#9197;</button>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="continuous" checked>
+      Play back-to-back (next episode starts automatically)
+    </label>
+  </section>
+
+  <audio id="player" preload="auto"></audio>
+
+  <ol class="ep" id="episodeList"></ol>
+
+  <section class="card">
+    <p class="note" style="margin-top:0">Five connected episodes, one each week: four friends count down to Christmas, volunteer for Christmas Together on Christmas Eve, and discover what they really want underneath their wish lists.</p>
+    <p class="note">New episodes are added here as they are finished. Your place is remembered on this device, so you can pick up where you left off.</p>
+  </section>
+
+  <footer>
+    <p class="sign">&ldquo;You are not alone at the crossroads.&rdquo;</p>
+    <p>A Crossroads Christmas Special: Home For Christmas<br>Crossroads Audio Drama</p>
+  </footer>
+</div>
+
+<script>
+var EPISODES = [
+  {
+    num: 1,
+    title: "All I Want for Christmas",
+    meta: "19 min 43 s",
+    desc: "Tori, Gabby, Eli and Nate count down to Christmas \u2014 but what Tori really wants can\u2019t be wrapped.",
+    src: "episode-1-all-i-want-for-christmas.mp3"
+  }
+];
+
+var RESUME_KEY = "xmas-player-resume-v1";
+var audio = document.getElementById("player");
+var playBtn = document.getElementById("playBtn");
+var seek = document.getElementById("seek");
+var curEl = document.getElementById("curTime");
+var durEl = document.getElementById("totTime");
+var nowTitle = document.getElementById("nowTitle");
+var nowSub = document.getElementById("nowSub");
+var listEl = document.getElementById("episodeList");
+var current = 0;
+var lastSaved = 0;
+
+function fmt(s) {
+  if (!isFinite(s)) return "0:00";
+  var m = Math.floor(s / 60), sec = Math.floor(s % 60);
+  return m + ":" + (sec < 10 ? "0" : "") + sec;
+}
+
+function setMediaSession(ep) {
+  if (!("mediaSession" in navigator)) return;
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: "Episode " + ep.num + " \u2014 " + ep.title,
+    artist: "Crossroads",
+    album: "A Crossroads Christmas Special: Home For Christmas",
+    artwork: [{ src: "cover.jpg", sizes: "800x800", type: "image/jpeg" }]
+  });
+  navigator.mediaSession.setActionHandler("play", function () { audio.play(); });
+  navigator.mediaSession.setActionHandler("pause", function () { audio.pause(); });
+  navigator.mediaSession.setActionHandler("previoustrack", function () { step(-1); });
+  navigator.mediaSession.setActionHandler("nexttrack", function () { step(1); });
+}
+
+function saveResume() {
+  try {
+    localStorage.setItem(RESUME_KEY, JSON.stringify({ src: EPISODES[current].src, time: audio.currentTime }));
+  } catch (e) {}
+}
+
+function loadResume() {
+  try {
+    var raw = localStorage.getItem(RESUME_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
+}
+
+function loadEpisode(i, autoplay) {
+  current = i;
+  var ep = EPISODES[i];
+  audio.src = ep.src;
+  nowTitle.textContent = "Episode " + ep.num + " \u2014 " + ep.title;
+  nowSub.textContent = ep.meta + " \u00b7 A Crossroads Christmas Special: Home For Christmas";
+  document.querySelectorAll("#episodeList button").forEach(function (b, idx) {
+    b.classList.toggle("current", idx === i);
+  });
+  setMediaSession(ep);
+  if (autoplay) audio.play();
+}
+
+function step(d) {
+  var n = current + d;
+  if (n >= 0 && n < EPISODES.length) loadEpisode(n, true);
+}
+
+function buildList() {
+  EPISODES.forEach(function (ep, i) {
+    var li = document.createElement("li");
+    var b = document.createElement("button");
+    b.innerHTML = '<span class="num">' + ep.num + '</span>' +
+      '<span style="flex:1;min-width:0;text-align:left"><h3>' + ep.title + '</h3><p>' + ep.desc + '</p></span>' +
+      '<span class="dur">' + ep.meta + '</span>';
+    b.addEventListener("click", function () { loadEpisode(i, true); });
+    li.appendChild(b);
+    listEl.appendChild(li);
+  });
+}
+
+document.getElementById("playAllBtn").addEventListener("click", function () { loadEpisode(0, true); });
+playBtn.addEventListener("click", function () { if (audio.paused) { audio.play(); } else { audio.pause(); } });
+document.getElementById("prevBtn").addEventListener("click", function () { step(-1); });
+document.getElementById("nextBtn").addEventListener("click", function () { step(1); });
+audio.addEventListener("play", function () { playBtn.textContent = "\u23f8"; });
+audio.addEventListener("pause", function () { playBtn.textContent = "\u25b6"; saveResume(); });
+audio.addEventListener("loadedmetadata", function () {
+  durEl.textContent = fmt(audio.duration);
+  seek.max = Math.floor(audio.duration);
+  var r = loadResume();
+  if (r && r.src === EPISODES[current].src && r.time > 5 && r.time < audio.duration - 10) {
+    audio.currentTime = r.time;
+  }
+});
+audio.addEventListener("timeupdate", function () {
+  if (audio.duration) seek.value = Math.floor(audio.currentTime);
+  curEl.textContent = fmt(audio.currentTime);
+  if (audio.currentTime - lastSaved > 5) { lastSaved = audio.currentTime; saveResume(); }
+});
+seek.addEventListener("input", function () { if (audio.duration) audio.currentTime = seek.value; });
+audio.addEventListener("ended", function () {
+  saveResume();
+  if (document.getElementById("continuous").checked && current + 1 < EPISODES.length) {
+    loadEpisode(current + 1, true);
+  } else {
+    playBtn.textContent = "\u25b6";
+    nowTitle.textContent = "Finished \u2014 pick an episode to listen again";
+  }
+});
+
+buildList();
+loadEpisode(0, false);
+</script>
+</body>
+</html>
