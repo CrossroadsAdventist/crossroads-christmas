@@ -1,23 +1,30 @@
 [
   {
-    "desc": "Tori, Gabby, Eli and Nate count down to Christmas — but what Tori really wants can't be wrapped.",
+    "desc": "Tori, Gabby, Eli and Nate count down to Christmas \u2014 but what Tori really wants can't be wrapped.",
     "dur": "19:23",
     "file": "episode-1-all-i-want-for-christmas.mp3",
     "n": 1,
     "title": "All I Want for Christmas"
   },
   {
-    "desc": "The day after a broken promise — and Tori is not the only one hiding something.",
+    "desc": "The day after a broken promise \u2014 and Tori is not the only one hiding something.",
     "dur": "18:50",
     "file": "episode-2-the-things-we-hide.mp3",
     "n": 2,
     "title": "The Things We Hide"
   },
   {
-    "desc": "Tori finally has the call with her father — and six days before Christmas Eve, the main hall floods.",
+    "desc": "Tori finally has the call with her father \u2014 and six days before Christmas Eve, the main hall floods.",
     "dur": "19:14",
     "file": "episode-3-secrets-in-the-snow.mp3",
     "n": 3,
     "title": "Secrets in the Snow"
+  },
+  {
+    "desc": "Five days to move Christmas Together into the church hall \u2014 and Tori's father comes home with news.",
+    "dur": "19:32",
+    "file": "episode-4-a-place-at-the-table.mp3",
+    "n": 4,
+    "title": "A Place at the Table"
   }
 ]
